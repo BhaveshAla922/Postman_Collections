@@ -6,7 +6,7 @@
 	},
 	"item": [
 		{
-			"name": "Create Client",
+			"name": "Create Client & CBAC",
 			"item": [
 				{
 					"name": "Create Client ID",
