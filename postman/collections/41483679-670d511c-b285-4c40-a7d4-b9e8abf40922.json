@@ -9,7 +9,7 @@
 			"name": "Create Client & CBAC",
 			"item": [
 				{
-					"name": "Create Client ID",
+					"name": "Create Client",
 					"event": [
 						{
 							"listen": "test",
