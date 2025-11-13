@@ -1,0 +1,892 @@
+{
+	"info": {
+		"_postman_id": "41483679-670d511c-b285-4c40-a7d4-b9e8abf40922",
+		"name": "BP Pack Creation & Transfer",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Create Client",
+			"item": [
+				{
+					"name": "Create Client ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "c59a40cd-acd8-4517-b550-fe24c4922c28",
+								"exec": [
+									"const jsonData = pm.response.json();",
+									"pm.environment.set(\"clientDid\", jsonData.clientId);",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "b618d9fb-b12c-426d-931b-3463ec799307",
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"id": "41483679-0c2909ff-eb63-4c68-bccf-f5fed6814057",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/create-clientId",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"create-clientId"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Generate CBAC",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "1a6e3f8d-76a7-4fcf-b16f-204f0e14ec24",
+								"exec": [
+									"const jsonData = pm.response.json();",
+									"pm.environment.set(\"CBAC\", JSON.stringify(jsonData));",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "80c2ff3b-426a-46f1-bfed-8a9c6c1f05a2",
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"id": "41483679-45f5bd7a-97c7-4f43-8fbb-dd5d3a47ba0b",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{apiKey}}",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/generate-cbac-presentation?holderDID={{clientDid}}&accessLevel=FullControl",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"generate-cbac-presentation"
+							],
+							"query": [
+								{
+									"key": "holderDID",
+									"value": "{{clientDid}}"
+								},
+								{
+									"key": "accessLevel",
+									"value": "FullControl"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"id": "41483679-7d798e13-bd10-472c-8cf6-8f5472f2e591"
+		},
+		{
+			"name": "Create Pack",
+			"item": [
+				{
+					"name": "Create Battery DID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "7a612bbc-e6bf-4adc-9475-464f2b4e8765",
+								"exec": [
+									"const jsonData = pm.response.json();",
+									"pm.collectionVariables.set(\"batteryDid\", jsonData.id);",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"id": "41483679-010a9b6b-d13d-43b7-9d99-74c3b2e40964",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/create-did",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"create-did"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Generate BBC",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "5d59e9c2-a7d8-4230-8474-aa4d1d39aee5",
+								"exec": [
+									"const jsonData = pm.response.json();",
+									"pm.collectionVariables.set(\"bbcId\", jsonData.id);",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"id": "41483679-6bd84a5d-d3b7-40a8-9796-93ffd3856eb6",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"credentialSubject\": {\n        \"type\": \"BBC\",\n        \"batteryId\": \"{{batteryDid}}\",\n        \"packUniqueId\": \"TESTING_API_PACK\",\n        \"manufacturersId\": \"C0000001\",\n        \"manufacturingDate\": \"2025-04-17T15:12:34.633Z\",\n        \"manufacturingLocation\": \"Aichi, Japan\",\n        \"intendedUse\": \"電気自動車バッテリー\",\n        \"packWeight\": 60,\n        \"lifeCycleStatus\": \"IN USE\",\n        \"cellType\": \"Lithium-Ion\",\n        \"cellManufacturerId\": \"CELL001\",\n        \"mobileOrStationary\": \"Mobile\",\n        \"bmsSoftwareVersion\": \"1.0.0\",\n        \"finalQualityTestDate\": \"2025-04-17T15:12:35.866Z\",\n        \"finalQualityTesterName\": \"DENSO Battery Passport\",\n        \"packSerialNumber\": \"PACK002\",\n        \"oemPartNumber\": \"1.23456789e+09\",\n        \"packDimensions\": \"100x60x80\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/issue-credential?credential_type=BBC",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"issue-credential"
+							],
+							"query": [
+								{
+									"key": "credential_type",
+									"value": "BBC"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Generate CFP",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "7a4a0ce5-cb09-4cd6-beb1-d437cb80a612",
+								"exec": [
+									"const jsonData = pm.response.json();",
+									"pm.collectionVariables.set(\"cfpId\", jsonData.id);",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"id": "41483679-b29aac4e-fba1-4419-bbab-b7102a108c11",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"credentialSubject\": {\n        \"type\": \"CarbonFootprint\",\n        \"batteryId\": \"{{batteryDid}}\",\n        \"packUniqueId\": \"TESTING_API_PACK\",\n        \"carbonFootprintShareRawMaterial\": 100,\n        \"carbonFootprintShareMainProduction\": 30,\n        \"carbonFootprintShareDistribution\": 20,\n        \"carbonFootprintShareEndOfLifeRecycling\": 10,\n        \"carbonFootprintPerformanceClassDoc\": \"\",\n        \"publicVerCarbonFootprintStudy\": \"\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/issue-credential?credential_type=CarbonFootprint",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"issue-credential"
+							],
+							"query": [
+								{
+									"key": "credential_type",
+									"value": "CarbonFootprint"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Generate SOH",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "3b690f64-9a83-4821-8cd2-e7a84e319421",
+								"exec": [
+									"const jsonData = pm.response.json();",
+									"pm.collectionVariables.set(\"sohId\", jsonData.id);",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"id": "41483679-078a32e2-f263-4b88-94c6-9b86aef5e947",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"credentialSubject\": {\n        \"type\": \"BatterySOH\",\n        \"batteryId\": \"{{batteryDid}}\",\n        \"packUniqueId\": \"TESTING_API_PACK\",\n        \"previousSOHVal\": 0,\n        \"previousSOHTimeStamp\": \"2025-04-17T15:12:35.873Z\",\n        \"newSOHVal\": 100,\n        \"newSOHTimeStamp\": \"2025-04-17T15:12:35.873Z\",\n        \"chargeCycles\": 420,\n        \"impedance\": 0,\n        \"maxCapacity\": 100,\n        \"batteryAge\": 0\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/issue-credential?credential_type=BatterySOH",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"issue-credential"
+							],
+							"query": [
+								{
+									"key": "credential_type",
+									"value": "BatterySOH"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Battery DID",
+					"id": "41483679-8ed195f3-0754-478d-bfcc-ac5f3300fb71",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\n  {\n    \"id\": \"{{bbcId}}\",\n    \"type\": \"BBC\",\n    \"serviceEndpoint\": \"{{baseUrl}}/request-presentation-by-id\"\n  },\n    {\n    \"id\": \"{{sohId}}\",\n    \"type\": \"BatterySOH\",\n    \"serviceEndpoint\": \"{{baseUrl}}/request-presentation-by-id\"\n  },\n    {\n    \"id\": \"{{cfpId}}\",\n    \"type\": \"CarbonFootprint\",\n    \"serviceEndpoint\": \"{{baseUrl}}/request-presentation-by-id\"\n  }\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/update-did/{{batteryDid}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"update-did",
+								"{{batteryDid}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "View Battery Wallet",
+					"id": "41483679-ae0c1453-332f-45c9-8f32-027cd4e642c1",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-cbac-vp",
+								"value": "{{CBAC}}",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/request-battery-wallet?batteryId={{batteryDid}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"request-battery-wallet"
+							],
+							"query": [
+								{
+									"key": "batteryId",
+									"value": "{{batteryDid}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"id": "41483679-839870a5-862d-48ba-992e-4e2754a602c3"
+		},
+		{
+			"name": "Transfer to Battery Agent",
+			"item": [
+				{
+					"name": "Asset Transfer",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "043421ee-f23b-4aee-97fa-3d80c9f5649a",
+								"exec": [
+									"const jsonData = pm.response.json().verifiablePresentations;",
+									"pm.environment.set(\"assetCBAC\", JSON.stringify(jsonData[1]));",
+									"pm.environment.set(\"vcCBAC\", JSON.stringify(jsonData[0]));",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"id": "41483679-4e83499e-dac8-41b5-855d-afdd7ad87d73",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{apiKey}}",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"newOwnerDID\": \"{{batteryAgentDid}}\",\n  \"newOwnerName\": \"{{batteryAgentName}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/assets/{{batteryDid}}/ownership-transfer",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"assets",
+								"{{batteryDid}}",
+								"ownership-transfer"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Verify Asset Transfer",
+					"id": "41483679-a656d266-77b9-47c7-9803-1704f476fd36",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{{assetCBAC}}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{batteryAgentUrl}}/api/assets/{{batteryDid}}/verify-asset-ownership",
+							"host": [
+								"{{batteryAgentUrl}}"
+							],
+							"path": [
+								"api",
+								"assets",
+								"{{batteryDid}}",
+								"verify-asset-ownership"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Verify VC Transfer",
+					"id": "41483679-d0be11fc-cef5-44ae-a166-76dba3fde400",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{{vcCBAC}}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{batteryAgentUrl}}/api/assets/save-asset-VCs",
+							"host": [
+								"{{batteryAgentUrl}}"
+							],
+							"path": [
+								"api",
+								"assets",
+								"save-asset-VCs"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "View Battery Wallet",
+					"id": "41483679-3b426e95-05a6-45f4-8443-a181103afd5c",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-cbac-vp",
+								"value": "{{CBAC}}",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{batteryAgentUrl}}/api/request-battery-wallet?batteryId={{batteryDid}}",
+							"host": [
+								"{{batteryAgentUrl}}"
+							],
+							"path": [
+								"api",
+								"request-battery-wallet"
+							],
+							"query": [
+								{
+									"key": "batteryId",
+									"value": "{{batteryDid}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"id": "41483679-878431e9-e162-49b7-9b63-02dbbf25179d"
+		},
+		{
+			"name": "Transfer to NA Agent",
+			"item": [
+				{
+					"name": "Asset Transfer",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "043421ee-f23b-4aee-97fa-3d80c9f5649a",
+								"exec": [
+									"const jsonData = pm.response.json().verifiablePresentations;",
+									"pm.collectionVariables.set(\"assetCBAC\", JSON.stringify(jsonData[1]));",
+									"pm.collectionVariables.set(\"vcCBAC\", JSON.stringify(jsonData[0]));",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"id": "41483679-4d717a96-3304-4951-aa7b-38277fdde39b",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{apiKey}}",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"newOwnerDID\": \"{{naAgentDid}}\",\n  \"newOwnerName\": \"{{naAgentName}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/assets/{{batteryDid}}/ownership-transfer",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"assets",
+								"{{batteryDid}}",
+								"ownership-transfer"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Verify Asset Transfer",
+					"id": "41483679-d4a98929-15f2-4fb9-a9b4-5cde282dcc50",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{{assetCBAC}}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{naAgentUrl}}/api/assets/{{batteryDid}}/verify-asset-ownership",
+							"host": [
+								"{{naAgentUrl}}"
+							],
+							"path": [
+								"api",
+								"assets",
+								"{{batteryDid}}",
+								"verify-asset-ownership"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Verify VC Transfer",
+					"id": "41483679-99937d78-71d8-415e-8b68-2b52b9e74a80",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{{vcCBAC}}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{naAgentUrl}}/api/assets/save-asset-VCs",
+							"host": [
+								"{{naAgentUrl}}"
+							],
+							"path": [
+								"api",
+								"assets",
+								"save-asset-VCs"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "View Battery Wallet",
+					"id": "41483679-de9640b1-1544-4825-894c-c2e717db6f41",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-cbac-vp",
+								"value": "{{CBAC}}",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{naAgentUrl}}/api/request-battery-wallet?batteryId={{batteryDid}}",
+							"host": [
+								"{{naAgentUrl}}"
+							],
+							"path": [
+								"api",
+								"request-battery-wallet"
+							],
+							"query": [
+								{
+									"key": "batteryId",
+									"value": "{{batteryDid}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"id": "41483679-f86b2f98-ca4f-425a-b3a9-17f57167a5d6"
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "6aa2ca00-13e9-46fb-9429-fe43dc9b8e59",
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					"const apiUrl = `${pm.environment.get('baseUrl')}/api/request-api-key`;",
+					"const apiExpiresAt = pm.collectionVariables.get('apiExpiresAt');",
+					"const currentTime = new Date().toISOString();",
+					"",
+					"if (!apiExpiresAt || currentTime >= apiExpiresAt) {",
+					"",
+					"  pm.sendRequest(",
+					"    {",
+					"      url: apiUrl,",
+					"      method: 'POST',",
+					"      header: {",
+					"        'Content-Type': 'application/json',",
+					"      },",
+					"    },",
+					"    function (err, response) {",
+					"      if (!err && response.code === 200) {",
+					"        const jsonData = response.json();",
+					"        pm.collectionVariables.set('apiKey', jsonData.apiKey);",
+					"        pm.collectionVariables.set('apiExpiresAt', jsonData.apiExpiresAt);",
+					"      } else {",
+					"        console.error('Failed to refresh API key:', err || response.status);",
+					"      }",
+					"    }",
+					"  );",
+					"}"
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "f055eef9-7585-4aa3-b7fd-4ce9a9260fa2",
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "batteryDid",
+			"value": ""
+		},
+		{
+			"key": "bbcId",
+			"value": ""
+		},
+		{
+			"key": "cfpId",
+			"value": ""
+		},
+		{
+			"key": "sohId",
+			"value": ""
+		},
+		{
+			"key": "batteryAgentUrl",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "batteryAgentName",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "batteryAgentDid",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "naAgentUrl",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "naAgentName",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "naAgentDid",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
