@@ -61,7 +61,7 @@
 					"response": []
 				},
 				{
-					"name": "Generate CBAC",
+					"name": "Generate Full Control CBAC",
 					"event": [
 						{
 							"listen": "test",
@@ -73,7 +73,8 @@
 									""
 								],
 								"type": "text/javascript",
-								"packages": {}
+								"packages": {},
+								"requests": {}
 							}
 						},
 						{
@@ -84,7 +85,8 @@
 									""
 								],
 								"type": "text/javascript",
-								"packages": {}
+								"packages": {},
+								"requests": {}
 							}
 						}
 					],
