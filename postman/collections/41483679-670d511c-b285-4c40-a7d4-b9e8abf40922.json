@@ -17,8 +17,7 @@
 								"id": "c59a40cd-acd8-4517-b550-fe24c4922c28",
 								"exec": [
 									"const jsonData = pm.response.json();",
-									"pm.environment.set(\"clientDid\", jsonData.clientId);",
-									""
+									"pm.environment.set(\"clientDid\", jsonData.clientId);"
 								],
 								"type": "text/javascript",
 								"packages": {}
